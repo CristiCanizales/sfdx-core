@@ -13,8 +13,7 @@ import { SandboxAccessor } from './accessors/sandboxAccessor';
 export class StateAggregator extends AsyncOptionalCreatable {
   private static instanceMap: Map<string, StateAggregator> = new Map();
   public aliases!: AliasAccessor;
-  public orgs!: OrgAccessor;
-  public sandboxes!: SandboxAccessor;
+  HOLAS
 
   /**
    * Reuse a StateAggregator if one was already created for the current global state directory
