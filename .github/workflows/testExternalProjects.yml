@@ -16,6 +16,11 @@ on:
         description: "runs-on property, ex: ubuntu-latest, windows-latest"
         type: string
         default: "ubuntu-latest"
+      preExternalBuildCommands:
+        required: false
+        description: "commands to run before the build of the external repo...for example, to delete known module conflicts"
+        type: string
+        default: 'echo "no preExternalBuildCommands passed"'
       preSwapCommands:
         required: false
         description: "commands to run before ANY modifications happen. For example, changes that modify the lockfile like yarn add or remove need to happen before the action manually swaps the dependency under test"
@@ -42,7 +47,7 @@ on:
 
 jobs:
   external-test:
-    name: yarn test
+    name: run tests
     runs-on: ${{ inputs.os }}
     steps:
       - name: Run git config
@@ -52,6 +57,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.nodeVersion }}
+      - name: Install CLI
+        uses: salesforcecli/github-workflows/.github/actions/retry@main
+        with:
+          max_attempts: ${{ inputs.attempts }}
+          command: npm install -g @salesforce/cli@nightly shx yarn-deduplicate --omit=dev
+          timeout_minutes: 20
       - name: Clone external project repo
         uses: salesforcecli/github-workflows/.github/actions/retry@main
         with:
@@ -80,6 +91,9 @@ jobs:
           yarn add forcedotcom/sfdx-core#${{ inputs.bundledBranch }}
           npx yarn-deduplicate
           yarn install  --network-timeout 600000
+      - name: Run pre-external build commands
+        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
+        run: ${{ inputs.preExternalBuildCommands }}
       - name: Build the external project (where the tests are)
         run: yarn build
       - name: Run tests with ${{ inputs.attempts }} attempts
