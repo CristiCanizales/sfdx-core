@@ -10,7 +10,6 @@ import { Global } from '../global';
 import { AliasAccessor } from './accessors/aliasAccessor';
 import { OrgAccessor } from './accessors/orgAccessor';
 import { SandboxAccessor } from './accessors/sandboxAccessor';
-export class StateAggregator extends AsyncOptionalCreatable {
   private static instanceMap: Map<string, StateAggregator> = new Map();
   public aliases!: AliasAccessor;
   HOLAS
