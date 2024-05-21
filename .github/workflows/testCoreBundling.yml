@@ -6,13 +6,14 @@ on:
     inputs:
       branch:
         description: 'Set the branch to bundle core'
-        required: false
         type: string
+        required: false
+        default: main
       nodeVersion:
         description: version of node to use.  It's better to specify latest, lts/* or lts/-1 than to hardode numbers
         type: string
-        default: lts/*
         required: false
+        default: lts/*
 
 jobs:
   bundle:
@@ -35,6 +36,6 @@ jobs:
       externalProjectGitUrl: ${{ matrix.externalProjectGitUrl }}
       os: ${{ matrix.os }}
       useCache: false
-      bundledBranch: ${{ github.ref_name }}
+      bundledBranch: ${{ github.ref_name || inputs.branch }}
       preSwapCommands: 'yarn upgrade @jsforce/jsforce-node@latest; npx yarn-deduplicate; yarn install'
       preExternalBuildCommands: 'shx rm -rf node_modules/@salesforce/core/node_modules/@jsforce/jsforce-node shx rm -rf node_modules/@salesforce/sf-plugins-core/node_modules/@salesforce/core node_modules/@salesforce/cli-plugins-testkit/node_modules/@salesforce/core node_modules/@salesforce/source-tracking/node_modules/@salesforce/core node_modules/@salesforce/source-deploy-retrieve/node_modules/@salesforce/core node_modules/@salesforce/apex-node/node_modules/@salesforce/core'
