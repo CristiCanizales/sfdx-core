@@ -34,11 +34,6 @@ on:
         required: false
         type: number
         default: 3
-      branch:
-        required: false
-        description: "branch to clone from the repo.  Defaults to 'main'"
-        type: string
-        default: "main"
       bundledBranch:
         required: false
         description: Branch with the bundled version of core"
@@ -50,7 +45,7 @@ jobs:
     name: run tests
     runs-on: ${{ inputs.os }}
     steps:
-      - name: Run git config
+      - name: Configure Git to handle long file paths on Windows
         if: ${{ runner.os == 'Windows' }}
         run: git config --system core.longpaths true
       - name: Setup node
@@ -63,37 +58,18 @@ jobs:
           max_attempts: ${{ inputs.attempts }}
           command: npm install -g @salesforce/cli@nightly shx yarn-deduplicate --omit=dev
           timeout_minutes: 20
-      - name: Clone external project repo
-        uses: salesforcecli/github-workflows/.github/actions/retry@main
+      - name: Checkout to external project
+        uses: actions/checkout@v4
         with:
-          max_attempts: 20
-          command: git clone -b ${{ inputs.branch }} --single-branch ${{ inputs.externalProjectGitUrl }} $(pwd)
-          timeout_minutes: 20
-      - name: Cache node modules
-        if: inputs.useCache
-        id: cache-nodemodules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-externalTests-${{ env.cache-name }}-${{ inputs.externalProjectGitUrl }}-${{ inputs.branch }}-${{ github.sha }}
+          repository: ${{ inputs.externalProjectGitUrl }}
       - name: Run yarn install
-        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
         uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
-      - name: Run pre-swap commands
-        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
-        run: ${{ inputs.preSwapCommands }}
       - name: Swap this dependency for the bundled version
-        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
         run: |
           yarn remove @salesforce/core
           yarn add forcedotcom/sfdx-core#${{ inputs.bundledBranch }}
           npx yarn-deduplicate
           yarn install  --network-timeout 600000
-      - name: Run pre-external build commands
-        if: ${{ steps.cache-nodemodules.outputs.cache-hit != 'true' }}
-        run: ${{ inputs.preExternalBuildCommands }}
       - name: Build the external project (where the tests are)
         run: yarn build
       - name: Run tests with ${{ inputs.attempts }} attempts
