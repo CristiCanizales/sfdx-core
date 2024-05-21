@@ -37,3 +37,4 @@ jobs:
       useCache: false
       bundledBranch: ${{ github.ref_name }}
       preSwapCommands: 'yarn upgrade @jsforce/jsforce-node@latest; npx yarn-deduplicate; yarn install'
+      preExternalBuildCommands: 'shx rm -rf node_modules/@salesforce/core/node_modules/@jsforce/jsforce-node shx rm -rf node_modules/@salesforce/sf-plugins-core/node_modules/@salesforce/core node_modules/@salesforce/cli-plugins-testkit/node_modules/@salesforce/core node_modules/@salesforce/source-tracking/node_modules/@salesforce/core node_modules/@salesforce/source-deploy-retrieve/node_modules/@salesforce/core node_modules/@salesforce/apex-node/node_modules/@salesforce/core'
