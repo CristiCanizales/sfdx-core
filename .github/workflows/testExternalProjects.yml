@@ -45,7 +45,7 @@ jobs:
       - name: Swap this dependency for the bundled version
         run: |
           yarn remove @salesforce/core
-          yarn add forcedotcom/sfdx-core#${{ inputs.bundledBranch }}
+          yarn add CristiCanizales/sfdx-core#${{ inputs.bundledBranch }}
           cd node_modules/@salesforce/core
           yarn install
           yarn build
