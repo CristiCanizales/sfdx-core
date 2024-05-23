@@ -19,7 +19,7 @@ jobs:
   bundle:
     uses: ./.github/workflows/bundle.yml
     with:
-      branch: ${{ github.ref_name || inputs.branch }}
+      branch: ${{ github.sha || inputs.branch }}
       nodeVersion: ${{ inputs.nodeVersion }}
   tests:
     needs: bundle
