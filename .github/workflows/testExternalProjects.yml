@@ -42,15 +42,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.externalProjectGit }}
-      - name: Run yarn install
-        uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
-      - name: Swap this dependency for the bundled version
+      - name: Remove core reference from package.json
         run: |
           yarn remove @salesforce/core
-          find . -type f \( -name "*.ts" \) -exec sed -i '' 's/@salesforce\/core/@salesforce\/core-bundle/g' {} +
+      - name: Retrieve Scripts
+        run: |
+          git clone https://github.com/forcedotcom/bundle-publish-scripts.git
+      - name: Update references for core bundle
+        run: |
+          node bundle-publish-scripts/scripts/updateForCoreBundle.js
+      - name: Swap this dependency for the bundled version
+        run: |
           yarn add forcedotcom/sfdx-core#${{ inputs.bundledBranch }}
+          cd node_modules/@salesforce/core-bundle
+          yarn install
+          yarn build
+          cd ../../..
           npx yarn-deduplicate
           yarn install  --network-timeout 600000
+      - name: Remove scripts
+        run: rm -rf ./bundle-publish-scripts
       - name: Build the external project (where the tests are)
         run: yarn build
       - name: Run tests with ${{ inputs.attempts }} attempts
