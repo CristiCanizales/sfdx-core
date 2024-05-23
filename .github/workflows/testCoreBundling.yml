@@ -29,7 +29,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        externalProjectGitUrl:
+        externalProjectGit:
           - forcedotcom/salesforcedx-templates
           - forcedotcom/salesforcedx-apex
     with:
