@@ -37,7 +37,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.nodeVersion }}\
+          node-version: ${{ inputs.nodeVersion }}
       - name: Checkout to external project
         uses: actions/checkout@v4
         with:
