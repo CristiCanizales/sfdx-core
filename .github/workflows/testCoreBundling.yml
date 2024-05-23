@@ -35,5 +35,4 @@ jobs:
     with:
       externalProjectGitUrl: ${{ matrix.externalProjectGitUrl }}
       os: ${{ matrix.os }}
-      useCache: false
       bundledBranch: ${{ github.ref_name || inputs.branch }}
