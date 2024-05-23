@@ -35,4 +35,4 @@ jobs:
     with:
       externalProjectGit: ${{ matrix.externalProjectGit }}
       os: ${{ matrix.os }}
-      bundledBranch: ${{ github.ref_name || inputs.branch }}
+      bundledBranch: ${{ github.sha || inputs.branch }}
