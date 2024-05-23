@@ -33,6 +33,6 @@ jobs:
           - forcedotcom/salesforcedx-templates
           - forcedotcom/salesforcedx-apex
     with:
-      externalProjectGitUrl: ${{ matrix.externalProjectGitUrl }}
+      externalProjectGit: ${{ matrix.externalProjectGit }}
       os: ${{ matrix.os }}
       bundledBranch: ${{ github.ref_name || inputs.branch }}
