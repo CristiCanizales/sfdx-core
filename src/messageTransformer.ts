@@ -19,6 +19,7 @@ export const messageTransformer = (): ts.TransformerFactory<ts.SourceFile> => {
   const transformerFactory: ts.TransformerFactory<ts.SourceFile> = (context) => (sourceFile) => {
     if (
       // if there are no messages, no transformation is needed
+      // dummy comment
       !sourceFile.statements.some((i) => ts.isImportDeclaration(i) && i.importClause?.getText().includes('Messages')) ||
       // don't transform the transformer itself
       sourceFile.fileName.includes('messageTransformer.ts')
