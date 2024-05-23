@@ -58,7 +58,7 @@ jobs:
       #     node scripts/updateForBundling.js
       - name: Update references for core bundle
         run: |
-          node ../../../bundle-publish-scripts/scripts/updateForCoreBundle.js
+          node ../bundle-publish-scripts/scripts/updateForCoreBundle.js
       - name: Generate Bundle
         run: |
           yarn build
