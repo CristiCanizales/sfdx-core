@@ -2,8 +2,8 @@ name: Test External Projects
 on:
   workflow_call:
     inputs:
-      externalProjectGitUrl:
-        description: "The url that will be cloned.  This contains the tests you want to run.  Ex: https://github.com/forcedotcom/templates"
+      externalProjectGit:
+        description: 'The url that will be cloned.  This contains the tests you want to run.  Ex: https://github.com/forcedotcom/templates'
         type: string
         required: true
       nodeVersion:
@@ -13,9 +13,9 @@ on:
         default: lts/*
       os:
         required: false
-        description: "runs-on property, ex: ubuntu-latest, windows-latest"
+        description: 'runs-on property, ex: ubuntu-latest, windows-latest'
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       attempts:
         required: false
         type: number
@@ -24,7 +24,7 @@ on:
         required: false
         description: Branch with the bundled version of core"
         type: string
-        default: "main"
+        default: 'main'
 
 jobs:
   external-test:
@@ -37,22 +37,17 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.nodeVersion }}
-      - name: Install CLI
-        uses: salesforcecli/github-workflows/.github/actions/retry@main
-        with:
-          max_attempts: ${{ inputs.attempts }}
-          command: npm install -g @salesforce/cli@nightly shx yarn-deduplicate --omit=dev
-          timeout_minutes: 20
+          node-version: ${{ inputs.nodeVersion }}\
       - name: Checkout to external project
         uses: actions/checkout@v4
         with:
-          repository: ${{ inputs.externalProjectGitUrl }}
+          repository: ${{ inputs.externalProjectGit }}
       - name: Run yarn install
         uses: salesforcecli/github-workflows/.github/actions/yarnInstallWithRetries@main
       - name: Swap this dependency for the bundled version
         run: |
           yarn remove @salesforce/core
+          find . -type f \( -name "*.ts" \) -exec sed -i '' 's/@salesforce\/core/@salesforce\/core-bundle/g' {} +
           yarn add forcedotcom/sfdx-core#${{ inputs.bundledBranch }}
           npx yarn-deduplicate
           yarn install  --network-timeout 600000
