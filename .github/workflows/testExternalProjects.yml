@@ -53,17 +53,17 @@ jobs:
           yarn install  --network-timeout 600000 --verbose
         working-directory: node_modules/@salesforce/core
       - name: Update for bundling
-        run: node node_modules/@salesforce/core/scripts/updateForBundling.js
+        run: node scripts/updateForBundling.js
         working-directory: node_modules/@salesforce/core
       - name: Generate Bundle
         run: |
           yarn install  --network-timeout 600000 --verbose
           yarn build
-          node node_modules/@salesforce/core/scripts/build.js
+          node scripts/build.js
         working-directory: node_modules/@salesforce/core
       - name: Post Bundling Update
         run: |
-          node node_modules/@salesforce/core/scripts/postBundlingUpdate.js
+          node scripts/postBundlingUpdate.js
         working-directory: node_modules/@salesforce/core
       - name: Yarn install
         run: |
