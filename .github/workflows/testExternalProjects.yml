@@ -56,8 +56,11 @@ jobs:
       - name: Prepare path for bundling script
         id: prepare-path
         run: echo "processed_path=$(echo "${{ inputs.externalProjectGit }}" | cut -d'/' -f2-)" >> $GITHUB_ENV
-      - name: print dir
+      - name: print directories
         run: |
+          ls -d ../..
+          ls -d ../../${{ env.processed_path }}
+          ls -d ../../${{ env.processed_path }}/node_modules
           ls -d ../../${{ env.processed_path }}/node_modules/@salesforce
       - name: Update for bundling
         run: node ../../${{ env.processed_path }}/node_modules/@salesforce/core/scripts/updateForBundling.js
