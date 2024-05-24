@@ -67,7 +67,7 @@ jobs:
         working-directory: node_modules/@salesforce/core
       - name: print node_modules content
         run: |
-          cd node_modules
+          cd node_modules/@salesforce
           ls
       - name: Yarn install
         run: |
