@@ -49,14 +49,14 @@ jobs:
       - name: Bundle node_modules
         run: |
           cd node_modules/@salesforce/core
-          yarn install  --network-timeout 600000
+          yarn install  --network-timeout 600000 --verbose
           yarn add -D esbuild@^0.19.5 esbuild-plugin-pino@^2.1.0 npm-dts@^1.3.12 esbuild-plugin-tsc@^0.4.0
-          yarn install  --network-timeout 600000
+          yarn install  --network-timeout 600000 --verbose
       - name: Update for bundling
         run: node node_modules/@salesforce/core/scripts/updateForBundling.js
       - name: Generate Bundle
         run: |
-          yarn install  --network-timeout 600000
+          yarn install  --network-timeout 600000 --verbose
           yarn build
           node node_modules/@salesforce/core/scripts/build.js
       - name: Post Bundling Update
@@ -66,7 +66,7 @@ jobs:
         run: |
           cd ../../..
           npx yarn-deduplicate
-          yarn install  --network-timeout 600000
+          yarn install  --network-timeout 600000 --verbose
       - name: Retrieve Scripts
         run: |
           git clone https://github.com/forcedotcom/bundle-publish-scripts.git
