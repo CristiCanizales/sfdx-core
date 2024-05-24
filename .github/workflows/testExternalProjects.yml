@@ -56,6 +56,7 @@ jobs:
         run: node node_modules/@salesforce/core/scripts/updateForBundling.js
       - name: Generate Bundle
         run: |
+          yarn install  --network-timeout 600000
           yarn build
           node node_modules/@salesforce/core/scripts/build.js
       - name: Post Bundling Update
