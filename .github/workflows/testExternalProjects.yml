@@ -54,10 +54,6 @@ jobs:
           yarn install  --network-timeout 600000
       - name: Update for bundling
         run: node node_modules/@salesforce/core/scripts/updateForBundling.js
-      - name: print directories
-        run: |
-          cd node_modules/@salesforce
-          ls
       - name: Generate Bundle
         run: |
           yarn build
