@@ -58,7 +58,8 @@ jobs:
         run: echo "processed_path=$(echo "${{ inputs.externalProjectGit }}" | cut -d'/' -f2-)" >> $GITHUB_ENV
       - name: print directories
         run: |
-          ls -d ./node_modules
+          cd node_modules
+          ls
       - name: Update for bundling
         run: node ../../${{ env.processed_path }}/node_modules/@salesforce/core/scripts/updateForBundling.js
       # - name: Update references for core bundle
