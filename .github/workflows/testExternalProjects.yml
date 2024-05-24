@@ -56,22 +56,19 @@ jobs:
       - name: Prepare path for bundling script
         id: prepare-path
         run: echo "processed_path=$(echo "${{ inputs.externalProjectGit }}" | cut -d'/' -f2-)" >> $GITHUB_ENV
+      - name: Update for bundling
+        run: node node_modules/@salesforce/core/scripts/updateForBundling.js
       - name: print directories
         run: |
           cd node_modules/@salesforce
           ls
-      - name: Update for bundling
-        run: node node_modules/@salesforce/core/scripts/updateForBundling.js
-      # - name: Update references for core bundle
-      #   run: |
-      #     node ../bundle-publish-scripts/scripts/updateForCoreBundle.js
       - name: Generate Bundle
         run: |
           yarn build
-          node scripts/build.js
+          node node_modules/@salesforce/core/scripts/build.js
       - name: Post Bundling Update
         run: |
-          node scripts/postBundlingUpdate.js
+          node node_modules/@salesforce/core/scripts/postBundlingUpdate.js
       - name: Yarn install
         run: |
           cd ../../..
