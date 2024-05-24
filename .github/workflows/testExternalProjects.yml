@@ -46,6 +46,7 @@ jobs:
         run: |
           yarn remove @salesforce/core
           yarn add CristiCanizales/sfdx-core#${{ inputs.bundledBranch }}
+          yarn install  --network-timeout 600000
       - name: Bundle node_modules
         run: |
           yarn install  --network-timeout 600000
