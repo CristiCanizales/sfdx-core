@@ -47,7 +47,7 @@ jobs:
           yarn install  --network-timeout 600000
           yarn remove @salesforce/core
           yarn add CristiCanizales/sfdx-core#${{ inputs.bundledBranch }}
-      - name: Bundle node_modules
+      - name: Add dependencies to bundle node_modules
         run: |
           yarn install  --network-timeout 600000
           yarn add -D esbuild@^0.19.5 esbuild-plugin-pino@^2.1.0 npm-dts@^1.3.12 esbuild-plugin-tsc@^0.4.0
@@ -64,10 +64,6 @@ jobs:
         run: |
           node scripts/postBundlingUpdate.js
         working-directory: node_modules/@salesforce/core
-      - name: print node_modules content
-        run: |
-          cd node_modules/@salesforce
-          ls
       - name: Yarn deduplicate
         run: |
           npx yarn-deduplicate
@@ -89,6 +85,3 @@ jobs:
           max_attempts: ${{ inputs.attempts }}
           command: yarn test
           retry_on: error
-        env:
-          SF_DISABLE_TELEMETRY: true
-          DEBUG: ${{ vars.DEBUG }}
